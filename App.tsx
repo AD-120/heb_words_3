@@ -201,7 +201,6 @@ const App: React.FC = () => {
 
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 max-w-2xl mx-auto relative">
-        {/* Floating Timer - Always visible */}
         {useTimer && (
           <div className="fixed top-24 right-4 z-40 rotate-[3deg]">
             <BrutalistBox color={timeLeft <= 2 ? COLORS.error : 'white'} className="py-2 px-6 text-3xl font-black animate-pulse neo-shadow-lg">
@@ -313,16 +312,12 @@ const App: React.FC = () => {
         </div>
       </header>
       
-      <main className="container mx-auto pb-24 pt-8">
+      <main className="container mx-auto pb-12 pt-8">
         {gameState === 'START' && renderStart()}
         {gameState === 'LEXICON' && renderLexicon()}
         {gameState === 'PLAYING' && renderGame()}
         {gameState === 'FINISHED' && renderFinished()}
       </main>
-
-      <footer className="fixed bottom-0 w-full p-4 text-center text-sm font-black border-t-8 border-black bg-white z-30 uppercase tracking-widest">
-        NÉO-BRUTALISME x HÉBREU &copy; 2024
-      </footer>
     </div>
   );
 };
