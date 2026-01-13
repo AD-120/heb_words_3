@@ -173,18 +173,10 @@ const App: React.FC = () => {
 
   const renderLexicon = () => (
     <div className="p-6 max-w-2xl mx-auto mb-20">
-      <div className="flex items-center justify-between mb-8 sticky top-[88px] bg-[#FFF4E0] py-4 z-10 border-b-8 border-black">
-        <BrutalistBox 
-          color={COLORS.secondary} 
-          hoverable 
-          onClick={() => setGameState('START')}
-          className="py-2 px-6 mr-4"
-        >
-          RETOUR
-        </BrutalistBox>
-        <h2 className="text-4xl md:text-5xl font-black text-black leading-none uppercase tracking-tighter text-right">
+      <div className="flex items-center justify-start mb-8 sticky top-[88px] bg-[#FFF4E0] py-4 z-10 border-b-8 border-black">
+        <h2 className="text-2xl md:text-3xl font-black text-black leading-none uppercase tracking-tighter text-left">
           DICTIONNAIRE<br/>
-          <span className="text-3xl">({VOCABULARY.length})</span>
+          <span className="text-xl">({VOCABULARY.length})</span>
         </h2>
       </div>
       <div className="grid grid-cols-1 gap-8">
@@ -300,10 +292,10 @@ const App: React.FC = () => {
     <div className="min-h-screen">
       <header className="p-6 flex justify-between items-center border-b-8 border-black bg-white sticky top-0 z-50">
         <div 
-          className="font-black text-3xl md:text-4xl tracking-tighter cursor-pointer hover:skew-x-2 transition-transform select-none lowercase"
+          className="font-black text-3xl md:text-4xl tracking-tighter cursor-pointer hover:skew-x-2 transition-transform select-none"
           onClick={() => setGameState('START')}
         >
-          ulpan<span className="text-pink-500">.</span>avi
+          Ulpan<span className="text-pink-500">.</span>Go
         </div>
         <div className="flex items-center gap-4">
            <div className="hidden sm:block font-black text-sm bg-black text-white px-3 py-1 rotate-[-2deg]">
