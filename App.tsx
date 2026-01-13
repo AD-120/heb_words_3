@@ -122,7 +122,6 @@ const App: React.FC = () => {
 
   const renderStart = () => (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-6">
-      {/* Title Box with Offset Black Background */}
       <div className="relative mb-12 max-w-lg w-full">
         <div className="absolute inset-0 bg-black translate-x-3 translate-y-3 rotate-[1deg]"></div>
         <BrutalistBox color={COLORS.secondary} className="relative z-10 rotate-[-1deg] py-10 px-4 w-full">
@@ -132,42 +131,40 @@ const App: React.FC = () => {
       </div>
       
       <div className="flex flex-col gap-0 w-full max-w-md items-center">
-        {/* Play Button and Timer Row */}
-        <div className="flex flex-row items-center gap-4 w-full mb-8 z-20">
+        <div className="flex flex-row items-center gap-4 w-full mb-8 z-20 max-w-xs sm:max-w-md">
           <BrutalistBox 
             color={COLORS.accent} 
             hoverable 
             onClick={startGame}
-            className="text-2xl md:text-3xl px-8 py-8 rotate-[1deg] text-center flex-[2]"
+            className="text-xl md:text-3xl px-4 sm:px-8 py-6 sm:py-8 rotate-[1deg] text-center flex-[3]"
           >
             JOUER MAINTENANT
           </BrutalistBox>
 
           <div 
             onClick={() => setUseTimer(!useTimer)}
-            className="flex flex-row items-center gap-3 cursor-pointer group bg-white neo-border p-3 neo-shadow-sm rotate-[-1deg] hover:bg-gray-50 transition-colors"
+            className="flex flex-row items-center gap-2 sm:gap-3 cursor-pointer group bg-white neo-border p-2 sm:p-3 neo-shadow-sm rotate-[-1deg] hover:bg-gray-50 transition-colors flex-1 min-w-[80px] sm:min-w-[120px]"
           >
-            <div className="w-10 h-10 neo-border bg-white flex items-center justify-center transition-all shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 neo-border bg-white flex items-center justify-center transition-all shrink-0">
               {useTimer && (
-                <span className="text-red-600 text-3xl font-black select-none leading-none" style={{ transform: 'translateY(-2px)' }}>
+                <span className="text-red-600 text-2xl sm:text-3xl font-black select-none leading-none" style={{ transform: 'translateY(-2px)' }}>
                   V
                 </span>
               )}
             </div>
             <div className="flex flex-col text-left">
-              <span className="font-black uppercase text-[10px] tracking-[0.1em] text-black leading-tight">CHRONO</span>
-              <span className="font-black uppercase text-[10px] tracking-[0.1em] text-black leading-tight">6 SEC.</span>
+              <span className="font-black uppercase text-[8px] sm:text-[10px] tracking-[0.05em] text-black leading-tight">TIMER</span>
+              <span className="font-black uppercase text-[8px] sm:text-[10px] tracking-[0.05em] text-black leading-tight">6s</span>
             </div>
           </div>
         </div>
 
-        {/* List Button inside Black Block Container */}
-        <div className="bg-black p-4 w-full max-w-xs rotate-[-1deg] neo-shadow pt-10">
+        <div className="bg-black p-4 w-full max-w-[280px] sm:max-w-xs rotate-[-1deg] neo-shadow pt-10">
            <div 
             onClick={() => setGameState('LEXICON')}
             className="bg-white neo-border p-5 cursor-pointer hover:bg-gray-100 transition-colors text-center"
            >
-              <span className="text-2xl font-black uppercase tracking-tighter text-black">LISTE DES MOTS</span>
+              <span className="text-xl sm:text-2xl font-black uppercase tracking-tighter text-black">LISTE DES MOTS</span>
            </div>
         </div>
       </div>
@@ -203,16 +200,20 @@ const App: React.FC = () => {
     const current = questions[currentIdx];
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 max-w-2xl mx-auto">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 max-w-2xl mx-auto relative">
+        {/* Floating Timer - Always visible */}
+        {useTimer && (
+          <div className="fixed top-24 right-4 z-40 rotate-[3deg]">
+            <BrutalistBox color={timeLeft <= 2 ? COLORS.error : 'white'} className="py-2 px-6 text-3xl font-black animate-pulse neo-shadow-lg">
+              {timeLeft}s
+            </BrutalistBox>
+          </div>
+        )}
+
         <div className="w-full flex justify-between items-center mb-8 gap-4">
           <BrutalistBox color="white" className="py-2 px-4 text-xl flex-1 text-center">
             {currentIdx + 1} / {questions.length}
           </BrutalistBox>
-          {useTimer && (
-            <BrutalistBox color={timeLeft <= 2 ? COLORS.error : 'white'} className="py-2 px-6 text-2xl font-black animate-pulse">
-              {timeLeft}s
-            </BrutalistBox>
-          )}
           <BrutalistBox color={COLORS.secondary} className="py-2 px-4 text-xl flex-1 text-center">
             SCORE: {score}
           </BrutalistBox>
@@ -298,7 +299,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <header className="p-6 flex justify-between items-center border-b-8 border-black bg-white sticky top-0 z-30">
+      <header className="p-6 flex justify-between items-center border-b-8 border-black bg-white sticky top-0 z-50">
         <div 
           className="font-black text-3xl md:text-4xl tracking-tighter cursor-pointer hover:skew-x-2 transition-transform select-none lowercase"
           onClick={() => setGameState('START')}
