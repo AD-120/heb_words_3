@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { GameState, Question, Word } from './types';
 import { VOCABULARY, COLORS } from './constants';
 import { audioService } from './services/audioService';
@@ -22,7 +22,9 @@ const Flashcard: React.FC<{ word: Word }> = ({ word }) => {
         </div>
       ) : (
         <div className="flex flex-col text-center w-full py-4">
-          <span className="text-[10px] font-black uppercase opacity-50 mb-2 tracking-widest">{word.category}</span>
+          <div className="flex justify-center gap-2 mb-2">
+            <span className="text-[10px] font-black uppercase opacity-50 tracking-widest">{word.category}</span>
+          </div>
           <span className="text-3xl font-black text-black mb-1">{word.french}</span>
           <span className="text-[10px] font-black uppercase opacity-30 mt-4 tracking-widest italic">Cliquez pour masquer</span>
         </div>
@@ -39,14 +41,24 @@ const App: React.FC = () => {
   const [feedback, setFeedback] = useState<{ isCorrect: boolean; show: boolean } | null>(null);
   const [useTimer, setUseTimer] = useState(false);
   const [timeLeft, setTimeLeft] = useState(6);
+  const [selectedLesson, setSelectedLesson] = useState<number | 'ALL'>(1);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const lessonsList = useMemo(() => {
+    const lessons = [...new Set(VOCABULARY.map(w => w.lesson))].sort((a, b) => a - b);
+    return lessons;
+  }, []);
 
   const shuffle = <T,>(array: T[]): T[] => {
     return [...array].sort(() => Math.random() - 0.5);
   };
 
   const createGameQuestions = useCallback(() => {
-    const shuffledWords = shuffle(VOCABULARY);
+    const pool = selectedLesson === 'ALL' 
+      ? VOCABULARY 
+      : VOCABULARY.filter(w => w.lesson === selectedLesson);
+      
+    const shuffledWords = shuffle(pool);
     return shuffledWords.map((word) => {
       const otherOptions = VOCABULARY
         .filter((w) => w.id !== word.id)
@@ -60,10 +72,11 @@ const App: React.FC = () => {
         correctAnswer: word.french
       };
     });
-  }, []);
+  }, [selectedLesson]);
 
   const startGame = () => {
     const newQs = createGameQuestions();
+    if (newQs.length === 0) return;
     setQuestions(newQs);
     setCurrentIdx(0);
     setScore(0);
@@ -108,7 +121,7 @@ const App: React.FC = () => {
       timerRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            handleAnswer(null); // Time's up!
+            handleAnswer(null);
             return 0;
           }
           return prev - 1;
@@ -120,9 +133,29 @@ const App: React.FC = () => {
     };
   }, [gameState, useTimer, feedback, handleAnswer]);
 
+  const LessonSelector = ({ className = "" }: { className?: string }) => (
+    <div className={`relative ${className}`}>
+      <select 
+        value={selectedLesson}
+        onChange={(e) => setSelectedLesson(e.target.value === 'ALL' ? 'ALL' : parseInt(e.target.value))}
+        className="w-full neo-border neo-shadow-sm p-4 bg-white font-black text-xl appearance-none cursor-pointer focus:outline-none focus:bg-gray-50 active-press"
+      >
+        <option value="ALL">TOUS LES COURS</option>
+        {lessonsList.map(num => (
+          <option key={num} value={num}>COURS {num}</option>
+        ))}
+      </select>
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 7L10 12L15 7" stroke="black" strokeWidth="3" strokeLinecap="square"/>
+        </svg>
+      </div>
+    </div>
+  );
+
   const renderStart = () => (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center p-6">
-      <div className="relative mb-12 max-w-lg w-full">
+      <div className="relative mb-10 max-w-lg w-full">
         <div className="absolute inset-0 bg-black translate-x-3 translate-y-3 rotate-[1deg]"></div>
         <BrutalistBox color={COLORS.secondary} className="relative z-10 rotate-[-1deg] py-10 px-4 w-full">
           <h1 className="text-6xl md:text-8xl font-black mb-4 uppercase tracking-tighter text-black leading-none">HÉBREU FLASH</h1>
@@ -130,10 +163,15 @@ const App: React.FC = () => {
         </BrutalistBox>
       </div>
       
+      <div className="mb-10 w-full max-w-md text-left">
+        <div className="text-xs font-black uppercase mb-3 ml-1 tracking-[0.2em] opacity-60">CHOISIR LE COURS</div>
+        <LessonSelector />
+      </div>
+      
       <div className="flex flex-col gap-0 w-full max-w-md items-center">
         <div className="flex flex-row items-center gap-4 w-full mb-8 z-20 max-w-xs sm:max-w-md">
           <BrutalistBox 
-            color={COLORS.accent} 
+            color={COLORS.primary} 
             hoverable 
             onClick={startGame}
             className="text-xl md:text-3xl px-4 sm:px-8 py-6 sm:py-8 rotate-[1deg] text-center flex-[3]"
@@ -171,21 +209,30 @@ const App: React.FC = () => {
     </div>
   );
 
-  const renderLexicon = () => (
-    <div className="p-6 max-w-2xl mx-auto mb-20">
-      <div className="flex items-center justify-start mb-8 sticky top-[88px] bg-[#FFF4E0] py-4 z-10 border-b-8 border-black">
-        <h2 className="text-2xl md:text-3xl font-black text-black leading-none uppercase tracking-tighter text-left">
-          DICTIONNAIRE<br/>
-          <span className="text-xl">({VOCABULARY.length})</span>
-        </h2>
+  const renderLexicon = () => {
+    const filteredLexicon = selectedLesson === 'ALL' 
+      ? VOCABULARY 
+      : VOCABULARY.filter(w => w.lesson === selectedLesson);
+
+    return (
+      <div className="p-6 max-w-2xl mx-auto mb-20">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 sticky top-[88px] bg-[#FFF4E0] py-4 z-10 border-b-8 border-black gap-4">
+          <h2 className="text-2xl md:text-3xl font-black text-black leading-none uppercase tracking-tighter text-left">
+            DICTIONNAIRE<br/>
+            <span className="text-xl">({filteredLexicon.length} MOTS)</span>
+          </h2>
+          <div className="w-full sm:w-64">
+             <LessonSelector />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-8">
+          {filteredLexicon.map((word) => (
+            <Flashcard key={word.id} word={word} />
+          ))}
+        </div>
       </div>
-      <div className="grid grid-cols-1 gap-8">
-        {VOCABULARY.map((word) => (
-          <Flashcard key={word.id} word={word} />
-        ))}
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderGame = () => {
     if (questions.length === 0 || !questions[currentIdx]) return null;
@@ -201,11 +248,8 @@ const App: React.FC = () => {
           </div>
         )}
 
-        <div className="w-full flex justify-between items-center mb-8 gap-4">
-          <BrutalistBox color="white" className="py-2 px-4 text-xl flex-1 text-center">
-            {currentIdx + 1} / {questions.length}
-          </BrutalistBox>
-          <BrutalistBox color={COLORS.secondary} className="py-2 px-4 text-xl flex-1 text-center">
+        <div className="w-full flex justify-center items-center mb-8 gap-4">
+          <BrutalistBox color={COLORS.secondary} className="py-2 px-8 text-xl text-center min-w-[200px]">
             SCORE: {score}
           </BrutalistBox>
         </div>
@@ -299,7 +343,7 @@ const App: React.FC = () => {
         </div>
         <div className="flex items-center gap-4">
            <div className="hidden sm:block font-black text-sm bg-black text-white px-3 py-1 rotate-[-2deg]">
-             HEBREW LEARN
+             {selectedLesson === 'ALL' ? 'TOUS LES COURS' : `COURS ${selectedLesson}`}
            </div>
         </div>
       </header>
