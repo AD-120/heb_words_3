@@ -339,7 +339,7 @@ const App: React.FC = () => {
           className="font-black text-3xl md:text-4xl tracking-tighter cursor-pointer hover:skew-x-2 transition-transform select-none"
           onClick={() => setGameState('START')}
         >
-          Ulpan<span className="text-pink-500">.</span>Go
+          Hebrew<span className="text-pink-500">.</span>Go
         </div>
         <div className="flex items-center gap-4">
            <div className="hidden sm:block font-black text-sm bg-black text-white px-3 py-1 rotate-[-2deg]">
