@@ -53,6 +53,27 @@ export const VOCABULARY: Word[] = [
   { id: '44', hebrew: 'אַלִּימִים', french: 'Violents', category: 'Adjectif', lesson: 3 },
   { id: '45', hebrew: 'מַרְדָּנִים', french: 'Rebelles', category: 'Adjectif', lesson: 3 },
   { id: '46', hebrew: 'שׁוֹבָב / ה', french: 'Espiègle / Coquin(e)', category: 'Adjectif', lesson: 3 },
+
+  // שיעור 4
+  { id: '47', hebrew: 'דְּמוּת', french: 'Personnage / Figure', category: 'Nom', lesson: 4 },
+  { id: '48', hebrew: 'הִזְדַּהוּת', french: 'Identification', category: 'Nom', lesson: 4 },
+  { id: '49', hebrew: 'קָבוּעַ', french: 'Constant / Fixe', category: 'Adjectif', lesson: 4 },
+  { id: '50', hebrew: 'מַהְפֵּכָה', french: 'Révolution', category: 'Nom', lesson: 4 },
+  { id: '51', hebrew: 'לְהַעֲרִיץ', french: 'Admirer', category: 'Verbe', lesson: 4 },
+  { id: '52', hebrew: 'לְהַעֲרִיךְ', french: 'Apprécier / Estimer', category: 'Verbe', lesson: 4 },
+  { id: '53', hebrew: 'תַּהֲלִיךְ', french: 'Processus', category: 'Nom', lesson: 4 },
+  { id: '54', hebrew: 'תַּגְלִית', french: 'Découverte', category: 'Nom', lesson: 4 },
+  { id: '55', hebrew: 'תְּרוּמָה', french: 'Contribution / Don', category: 'Nom', lesson: 4 },
+  { id: '56', hebrew: 'לִכְבּוֹשׁ', french: 'Conquérir', category: 'Verbe', lesson: 4 },
+  { id: '57', hebrew: 'חֻפָּה', french: 'Houppa / Dais', category: 'Nom', lesson: 4 },
+  { id: '58', hebrew: 'מָנָה', french: 'Portion / Plat', category: 'Nom', lesson: 4 },
+  { id: '59', hebrew: 'מִצְוָה', french: 'Mitzvah / Précepte', category: 'Nom', lesson: 4 },
+  { id: '60', hebrew: 'סֶדֶק', french: 'Fissure / Fente', category: 'Nom', lesson: 4 },
+  { id: '61', hebrew: 'סִכָּה', french: 'Épingle / Broche', category: 'Nom', lesson: 4 },
+  { id: '62', hebrew: 'סְעוּדָה', french: 'Repas / Festin', category: 'Nom', lesson: 4 },
+  { id: '63', hebrew: 'צְדָקָה', french: 'Charité / Aumône', category: 'Nom', lesson: 4 },
+  { id: '64', hebrew: 'לְהַכִּישׁ (אֶת)', french: 'Mordre (par un serpent)', category: 'Verbe', lesson: 4 },
+  { id: '65', hebrew: 'רוֹאֶה בַּכּוֹכָבִים', french: 'Astrologue', category: 'Nom', lesson: 4 },
 ];
 
 export const COLORS = {
